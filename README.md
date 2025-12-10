@@ -1,0 +1,1 @@
+This project is an AI-powered Gym Assistant built using LangChain4j, Embabel, and a hybrid storage architecture combining RDBMS + Vector Database. The goal is to let users describe gym equipment in natural language and automatically map it to the correct machine, then generate personalized workout plans, progressions, and calorie guidance.
