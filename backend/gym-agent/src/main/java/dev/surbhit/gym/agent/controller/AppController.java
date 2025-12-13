@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/app")   // allowed on interface
+@RequestMapping("/api/v1/app")
 public interface AppController {
 
     @PostMapping("/register")
