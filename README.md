@@ -1,1 +1,30 @@
-This project is an AI-powered Gym Assistant built using LangChain4j, Embabel, and a hybrid storage architecture combining RDBMS + Vector Database. The goal is to let users describe gym equipment in natural language and automatically map it to the correct machine, then generate personalized workout plans, progressions, and calorie guidance.
+🏋️ AI Workout Planner (Agentic Backend – Java)
+
+An agentic AI workout planning backend built with Spring Boot, Embabel, and LangChain4j, using PostgreSQL + pgvector for Retrieval-Augmented Generation (RAG).
+
+The system generates personalized and safe workout plans by combining:
+
+structured user & gym data (RDBMS)
+
+domain fitness knowledge (RAG)
+
+controlled LLM reasoning
+
+🧠 Architecture
+Controller → Orchestrator → Embabel Agent
+           → LangChain4j → RAG (pgvector) → LLM
+
+✨ Key Concepts
+
+Embabel: deterministic agent workflow & decisions
+
+LangChain4j: structured LLM interaction
+
+RAG (pgvector): grounded exercise knowledge
+
+PostgreSQL: source of truth for user & gym data
+
+📚 RAG Usage
+
+RAG is applied selectively (e.g., beginner users) to enforce
+consistent training rules and safety guidelines.
