@@ -21,6 +21,17 @@ public class AppRegistration {
     private String email;
 
     @NotNull
+    private String role;
+
+    public @NotNull String getRole() {
+        return role;
+    }
+
+    public void setRole(@NotNull String role) {
+        this.role = role;
+    }
+
+    @NotNull
     private String password;
 
     public @NotNull String getFirstName() {
@@ -47,6 +58,7 @@ public class AppRegistration {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 

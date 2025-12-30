@@ -42,7 +42,6 @@ public class AppUser {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", passWordHash='" + passWordHash + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", provider='" + provider + '\'' +
                 ", role='" + role + '\'' +

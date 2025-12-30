@@ -3,6 +3,8 @@ package dev.surbhit.gym.agent.security;
 import dev.surbhit.gym.agent.repository.AppUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -12,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
@@ -44,5 +46,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
+        DefaultMethodSecurityExpressionHandler handler =
+                new DefaultMethodSecurityExpressionHandler();
+
+        // 🚫 Disable role hierarchy completely
+        handler.setRoleHierarchy(null);
+
+        return handler;
     }
 }
