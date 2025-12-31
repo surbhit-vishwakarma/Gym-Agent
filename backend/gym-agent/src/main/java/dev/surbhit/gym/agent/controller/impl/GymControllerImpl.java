@@ -3,15 +3,13 @@ package dev.surbhit.gym.agent.controller.impl;
 import dev.surbhit.gym.agent.controller.GymController;
 import dev.surbhit.gym.agent.mapper.CreateGymRequest;
 import dev.surbhit.gym.agent.mapper.GymListResponse;
+import dev.surbhit.gym.agent.mapper.MachineDto;
 import dev.surbhit.gym.agent.service.GymService;
 import dev.surbhit.gym.agent.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +27,7 @@ public class GymControllerImpl implements GymController {
     @PostMapping("/gym")
     @Override
     @PreAuthorize("hasRole('GYM_OWNER')")
-    public ResponseEntity<String> createGym(CreateGymRequest dto) {
+    public ResponseEntity<String> createGym(@RequestBody CreateGymRequest dto) {
         try{
             UUID ownerId = SecurityUtils.getCurrentUserId();
             gymService.registerGym(dto, ownerId);
@@ -46,5 +44,15 @@ public class GymControllerImpl implements GymController {
 
         List<GymListResponse> gymListResponses= gymService.findAllGyms();
         return new ResponseEntity<>(gymListResponses, HttpStatus.OK);
+    }
+
+    @PostMapping("/machine")
+    @PreAuthorize("hasRole('GYM_OWNER')")
+    public ResponseEntity<String>createMachine(@RequestBody MachineDto machineDto){
+        boolean check = gymService.registerMachine(machineDto);
+        if(check)
+            return new ResponseEntity<>("Machine added", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Machine cant be added is gym not present", HttpStatus.BAD_REQUEST);
     }
 }

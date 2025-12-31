@@ -1,5 +1,6 @@
 package dev.surbhit.gym.agent.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -8,6 +9,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "gym_machines")
 public class GymMachine {
+    public GymMachine() {
+    }
 
     @Id
     @GeneratedValue
@@ -19,6 +22,7 @@ public class GymMachine {
 
     @ManyToOne
     @JoinColumn(name = "gym_id", nullable = false)
+    @JsonIgnore
     private Gym gym;
 
     public UUID getId() {
