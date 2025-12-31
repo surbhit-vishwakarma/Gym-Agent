@@ -4,6 +4,7 @@ import dev.surbhit.gym.agent.controller.GymController;
 import dev.surbhit.gym.agent.mapper.CreateGymRequest;
 import dev.surbhit.gym.agent.mapper.GymListResponse;
 import dev.surbhit.gym.agent.mapper.MachineDto;
+import dev.surbhit.gym.agent.mapper.SelectGymDto;
 import dev.surbhit.gym.agent.service.GymService;
 import dev.surbhit.gym.agent.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
@@ -54,5 +55,16 @@ public class GymControllerImpl implements GymController {
             return new ResponseEntity<>("Machine added", HttpStatus.OK);
         else
             return new ResponseEntity<>("Machine cant be added is gym not present", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/user/gym")
+    @PreAuthorize("hasRole('NORMAL_USER')")
+    public ResponseEntity<String> selectGym(@RequestBody SelectGymDto selectGymDto){
+        UUID userId = SecurityUtils.getCurrentUserId();
+        boolean check = gymService.joinGym(selectGymDto, userId );
+        if(check)
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Bad Request",HttpStatus.BAD_REQUEST);
     }
 }

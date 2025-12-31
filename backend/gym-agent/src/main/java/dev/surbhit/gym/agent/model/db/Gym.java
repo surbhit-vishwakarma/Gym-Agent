@@ -25,6 +25,17 @@ public class Gym {
     @OneToMany(mappedBy = "gym", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GymMachine> machines = new ArrayList<>();
 
+    @OneToMany(mappedBy = "gym")
+    private List<AppUser> users = new ArrayList<>();
+
+    public List<AppUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<AppUser> users) {
+        this.users = users;
+    }
+
     public UUID getId() {
         return id;
     }

@@ -31,6 +31,18 @@ public class AppUser {
         return userId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gym_id")
+    private Gym gym;
+
+    public Gym getGym() {
+        return gym;
+    }
+
+    public void setGym(Gym gym) {
+        this.gym = gym;
+    }
+
     public void setUserId(UUID userId) {
         this.userId = userId;
     }
