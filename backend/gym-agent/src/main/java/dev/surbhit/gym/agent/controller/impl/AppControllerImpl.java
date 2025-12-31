@@ -9,13 +9,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
 
 @RestController
 public class AppControllerImpl implements AppController {
@@ -43,18 +40,5 @@ public class AppControllerImpl implements AppController {
         }
 
         return new ResponseEntity<>(token, HttpStatus.OK);
-    }
-
-
-    @GetMapping("/hello")
-    @PreAuthorize("hasRole('NORMAL_USER')")
-    public ResponseEntity<String> hello(){
-        return new ResponseEntity<>("Hello",HttpStatus.OK);
-    }
-
-    @GetMapping("/hello1")
-    @PreAuthorize("hasRole('GYM_OWNER')")
-    public ResponseEntity<String> hello1(){
-        return new ResponseEntity<>("Hello",HttpStatus.OK);
     }
 }
