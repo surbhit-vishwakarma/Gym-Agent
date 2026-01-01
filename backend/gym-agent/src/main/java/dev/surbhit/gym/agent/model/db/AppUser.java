@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,6 +36,17 @@ public class AppUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gym_id")
     private Gym gym;
+
+    @OneToMany(mappedBy = "appUser")
+    private List<Calorie> calories = new ArrayList<>();
+
+    public List<Calorie> getCalories() {
+        return calories;
+    }
+
+    public void setCalories(List<Calorie> calories) {
+        this.calories = calories;
+    }
 
     public Gym getGym() {
         return gym;
