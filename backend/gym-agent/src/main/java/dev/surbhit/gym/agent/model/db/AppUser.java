@@ -29,8 +29,27 @@ public class AppUser {
     @Column(nullable = false)
     private String firstName;
 
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
     public UUID getUserId() {
         return userId;
+    }
+
+    public List<DailyCalorie> getDailyCalories() {
+        return dailyCalories;
+    }
+
+    public void setDailyCalories(List<DailyCalorie> dailyCalories) {
+        this.dailyCalories = dailyCalories;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,6 +58,9 @@ public class AppUser {
 
     @OneToMany(mappedBy = "appUser")
     private List<Calorie> calories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<DailyCalorie> dailyCalories = new ArrayList<>();
 
     public List<Calorie> getCalories() {
         return calories;
@@ -61,29 +83,16 @@ public class AppUser {
     }
 
     @Override
-    public String toString() {
-        return "AppUser{" +
-                "userId=" + userId +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", provider='" + provider + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AppUser appUser = (AppUser) o;
-        return Objects.equals(userId, appUser.userId) && Objects.equals(email, appUser.email) && Objects.equals(firstName, appUser.firstName) && Objects.equals(lastName, appUser.lastName) && Objects.equals(passWordHash, appUser.passWordHash) && Objects.equals(phoneNumber, appUser.phoneNumber) && Objects.equals(provider, appUser.provider) && Objects.equals(role, appUser.role);
+        if (!(o instanceof AppUser)) return false;
+        AppUser that = (AppUser) o;
+        return userId != null && userId.equals(that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, firstName, lastName, passWordHash, phoneNumber, provider, role);
+        return getClass().hashCode();
     }
 
     public String getEmail() {

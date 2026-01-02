@@ -1,6 +1,7 @@
 package dev.surbhit.gym.agent.controller.impl;
 
 import dev.surbhit.gym.agent.controller.HealthMetricsController;
+import dev.surbhit.gym.agent.mapper.CalorieIntakeRequest;
 import dev.surbhit.gym.agent.mapper.CalorieRequest;
 import dev.surbhit.gym.agent.mapper.StringResponse;
 import dev.surbhit.gym.agent.service.HealthMetricsService;
@@ -31,6 +32,16 @@ public class HealthMetricsControllerImpl implements HealthMetricsController {
     public ResponseEntity<StringResponse> calculateCalories(@RequestBody CalorieRequest request) {
         UUID userID = SecurityUtils.getCurrentUserId();
         String res = healthMetricsService.addUserCalorie(request, userID);
+        StringResponse response = new StringResponse(res);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    @PostMapping("/calorie/user")
+    @PreAuthorize("hasRole('NORMAL_USER')")
+    public ResponseEntity<StringResponse> addCalorie(CalorieIntakeRequest calorieIntakeRequest) {
+        UUID userId = SecurityUtils.getCurrentUserId();
+        String res = healthMetricsService.addDailyCalorie(calorieIntakeRequest,userId);
         StringResponse response = new StringResponse(res);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
