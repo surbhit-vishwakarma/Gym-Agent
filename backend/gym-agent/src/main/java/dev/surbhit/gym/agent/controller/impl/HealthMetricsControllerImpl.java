@@ -4,16 +4,15 @@ import dev.surbhit.gym.agent.controller.HealthMetricsController;
 import dev.surbhit.gym.agent.mapper.CalorieIntakeRequest;
 import dev.surbhit.gym.agent.mapper.CalorieRequest;
 import dev.surbhit.gym.agent.mapper.StringResponse;
+import dev.surbhit.gym.agent.model.db.DailyCalorie;
 import dev.surbhit.gym.agent.service.HealthMetricsService;
 import dev.surbhit.gym.agent.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -46,8 +45,12 @@ public class HealthMetricsControllerImpl implements HealthMetricsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    @Override
-//    public ResponseEntity<List<CalorieHistoryResponse>> getCalorieHistory() {
-//        return null;
-//    }
+    @Override
+    @PreAuthorize("hasRole('NORMAL_USER')")
+    @GetMapping("/calories/user")
+    public ResponseEntity<List<DailyCalorie>> getCalorieHistory() {
+        UUID userId = SecurityUtils.getCurrentUserId();
+        List<DailyCalorie> dailyCalories = healthMetricsService.getUserCalorieHistory(userId);
+        return new ResponseEntity<>(dailyCalories,HttpStatus.OK);
+    }
 }

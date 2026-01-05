@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -124,5 +125,9 @@ public class HealthMetricsService {
         dailyCalorieRepository.save(dailyCalorie);
 
         return "Daily calorie updated successfully";
+    }
+
+    public List<DailyCalorie> getUserCalorieHistory(UUID userId) {
+        return dailyCalorieRepository.findByUser_UserId(userId);
     }
 }

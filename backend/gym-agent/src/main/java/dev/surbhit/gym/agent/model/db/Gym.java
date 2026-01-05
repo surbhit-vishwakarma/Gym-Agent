@@ -1,5 +1,6 @@
 package dev.surbhit.gym.agent.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class Gym {
     private List<GymMachine> machines = new ArrayList<>();
 
     @OneToMany(mappedBy = "gym")
+    @JsonIgnore
     private List<AppUser> users = new ArrayList<>();
 
     public List<AppUser> getUsers() {

@@ -1,5 +1,6 @@
 package dev.surbhit.gym.agent.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,7 +32,6 @@ public class DailyCalorie {
                 "targetCalorie=" + targetCalorie +
                 ", currentCalorie=" + currentCalorie +
                 ", date=" + date +
-                ", appUser=" + user +
                 '}';
     }
 
@@ -61,7 +61,7 @@ public class DailyCalorie {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
+    @JsonIgnore
     public AppUser getAppUser() {
         return user;
     }
