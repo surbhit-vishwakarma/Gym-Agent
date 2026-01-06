@@ -2,7 +2,6 @@ package dev.surbhit.gym.agent.constants;
 
 public interface CalorieConstants {
     public static final String MALE = "MALE";
-    public static final  String  FEMALE = "FEMALE";
     public static final  String  WEIGHT_LOSS = "WEIGHT_LOSS";
     public static final  String  MAINTAIN_WEIGHT = "MAINTAIN_WEIGHT";
     public static final  String  WEIGHT_GAIN = "WEIGHT_GAIN";

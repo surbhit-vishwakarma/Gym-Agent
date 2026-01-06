@@ -1,13 +1,14 @@
 package dev.surbhit.gym.agent.service;
-
-import dev.surbhit.gym.agent.agent.TrainerAgent;
+import com.embabel.agent.core.*;
+import com.embabel.agent.api.common.autonomy.AgentInvocation;
+import dev.surbhit.gym.agent.mapper.FinalWorkoutPlan;
 import dev.surbhit.gym.agent.mapper.UserFitnessContext;
 import dev.surbhit.gym.agent.mapper.WorkoutPlan;
 import dev.surbhit.gym.agent.model.db.Calorie;
 import dev.surbhit.gym.agent.model.db.DailyCalorie;
 import dev.surbhit.gym.agent.repository.CalorieRepository;
 import dev.surbhit.gym.agent.repository.DailyCalorieRepository;
-import org.apache.catalina.User;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,57 +18,40 @@ import java.util.UUID;
 @Service
 public class TrainerWorkFlow {
 
-    private final TrainerAgent agent;
 
     private final CalorieRepository calorieRepository ;
     private final DailyCalorieRepository dailyCalorieRepository;
+    private final AgentPlatform agentPlatform;
 
-    public TrainerWorkFlow(TrainerAgent agent, CalorieRepository calorieRepository, DailyCalorieRepository dailyCalorieRepository) {
-        this.agent = agent;
+    public TrainerWorkFlow(CalorieRepository calorieRepository, DailyCalorieRepository dailyCalorieRepository, AgentPlatform agentPlatform) {
         this.calorieRepository = calorieRepository;
         this.dailyCalorieRepository = dailyCalorieRepository;
+        this.agentPlatform = agentPlatform;
     }
 
     public WorkoutPlan run(UUID userId) {
-
         Optional<Calorie> calorie = calorieRepository.findByAppUser_UserId(userId);
         if(calorie.isEmpty()){
             return null;
         }
 
-
         List<DailyCalorie> dailyCalorie = dailyCalorieRepository.findByUser_UserId(userId);
-        Calorie currentUserCalorieDetails = calorie.get();
-        UserFitnessContext userFitnessContext = new UserFitnessContext(userId, currentUserCalorieDetails.getAppUser().getFirstName(),
-                currentUserCalorieDetails.getAge(), currentUserCalorieDetails.getHeight(),
-                currentUserCalorieDetails.getWeight(), currentUserCalorieDetails.getTarget(),
-                currentUserCalorieDetails.getAppUser().getGym().getName(), currentUserCalorieDetails.getAppUser().getGym().getMachines(),dailyCalorie);
+        Calorie currentUserCalorie = calorie.get();
+        UserFitnessContext userFitnessContext = getUserFitnessContext(userId, currentUserCalorie, dailyCalorie);
 
-//        // Analyze calorie history
-//        if (agent.isUserUnderEating(userFitnessContext)) {
-//            context = new UserFitnessContext(
-//                    context.userId(),
-//                    context.heightCm(),
-//                    context.weightKg(),
-//                    "recovery",
-//                    context.last7DaysCalories(),
-//                    context.availableMachines(),
-//                    context.intensityCap()
-//            );
-//        }
 
-        // Generate plan
-        WorkoutPlan plan = agent.generatePlan(userFitnessContext);
+        FinalWorkoutPlan result =
+                AgentInvocation.create(agentPlatform, FinalWorkoutPlan.class)
+                        .invoke(userFitnessContext);
 
-//        // Validate safety
-//        if (!agent.isPlanSafe(plan, currentUserCalorieDetails)) {
-//            context = agent.lowerIntensity(currentUserCalorieDetails);
-//            plan = agent.generatePlan(currentUserCalorieDetails);
-//        }
+        return result.plan();
+    }
 
-        // Save
-        agent.savePlan(plan);
-
-        return plan;
+    @NotNull
+    private static UserFitnessContext getUserFitnessContext(UUID userId, Calorie calorie, List<DailyCalorie> dailyCalorie) {
+        return new UserFitnessContext(userId, calorie.getAppUser().getFirstName(),
+                calorie.getAge(), calorie.getHeight(),
+                calorie.getWeight(), calorie.getTarget(),
+                calorie.getAppUser().getGym().getName(), calorie.getAppUser().getGym().getMachines(), dailyCalorie);
     }
 }
