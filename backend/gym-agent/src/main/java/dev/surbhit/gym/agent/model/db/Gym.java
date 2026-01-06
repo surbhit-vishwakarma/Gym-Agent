@@ -98,7 +98,6 @@ public class Gym {
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", ownerId=" + ownerId +
-                ", machines=" + machines +
                 '}';
     }
 

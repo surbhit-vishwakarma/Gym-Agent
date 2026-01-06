@@ -85,7 +85,6 @@ public class GymMachine {
                 ", name='" + name + '\'' +
                 ", category='" + category + '\'' +
                 ", brand='" + brand + '\'' +
-                ", gym=" + gym +
                 '}';
     }
 

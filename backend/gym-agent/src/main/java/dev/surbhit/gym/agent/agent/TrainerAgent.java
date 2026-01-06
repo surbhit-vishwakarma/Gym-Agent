@@ -4,6 +4,7 @@ import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
 import dev.surbhit.gym.agent.mapper.UserFitnessContext;
 import dev.surbhit.gym.agent.mapper.WorkoutPlan;
+import dev.surbhit.gym.agent.model.db.DailyCalorie;
 
 
 @Agent(description = "Agent to create gym plan")
@@ -20,7 +21,7 @@ public class TrainerAgent {
     public boolean isUserUnderEating(UserFitnessContext ctx) {
         double avgCalories = ctx.last7DaysCalories()
                 .stream()
-                .mapToInt(Integer::intValue)
+                .mapToInt(DailyCalorie::getCurrentCalorie)
                 .average()
                 .orElse(0);
 
