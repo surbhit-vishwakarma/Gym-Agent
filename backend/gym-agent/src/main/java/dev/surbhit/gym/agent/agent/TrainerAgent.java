@@ -22,9 +22,6 @@ public class TrainerAgent {
         this.trainerBrain = trainerBrain;
     }
 
-    // =========================
-    // STEP 1: MUST RUN FIRST
-    // =========================
     @Action
     public EffectiveFitnessContext decideGoal(UserFitnessContext ctx) {
         System.out.println("✅ decideGoal");
@@ -41,18 +38,12 @@ public class TrainerAgent {
         return new EffectiveFitnessContext(ctx, effectiveGoal);
     }
 
-    // =========================
-    // STEP 2: MUST RUN SECOND
-    // =========================
     @Action
     public WorkoutPlan generatePlan(EffectiveFitnessContext ctx) {
         System.out.println("✅ generatePlan");
         return trainerBrain.generatePlan(ctx.originalContext());
     }
 
-    // =========================
-    // STEP 3: MUST RUN THIRD
-    // =========================
     @Action
     public SafeWorkoutPlan regenerateIfUnsafe(
             WorkoutPlan plan,
@@ -64,7 +55,6 @@ public class TrainerAgent {
             return new SafeWorkoutPlan(plan);
         }
 
-        // reuse same brain with modified goal
         UserFitnessContext saferCtx =
                 new UserFitnessContext(
                         ctx.originalContext().userId(),
@@ -82,9 +72,6 @@ public class TrainerAgent {
         return new SafeWorkoutPlan(saferPlan);
     }
 
-    // =========================
-    // SAFETY RULES (internal)
-    // =========================
     private boolean isPlanSafe(WorkoutPlan plan, String goal) {
 
         if (plan.trainingDaysPerWeek() > 5) return false;
@@ -98,9 +85,6 @@ public class TrainerAgent {
         };
     }
 
-    // =========================
-    // STEP 4: FINAL GOAL
-    // =========================
     @AchievesGoal(description = "Workout plan safely saved")
     @Action
     public FinalWorkoutPlan savePlan(SafeWorkoutPlan safePlan) {
