@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gym-agent
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gym-agent
+  template:
+    metadata:
+      labels:
+        app: gym-agent
+    spec:
+      containers:
+      - name: gym-agent
+        image: surbhit/gym-agent:latest
+        ports:
+        - containerPort: 8080
+        
+        envFrom:
+        - configMapRef:
+            name: gym-agent-config
+        - secretRef:
+            name: gym-agent-secrets
+        
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: gym-agent-config
+              key: DB_USERNAME
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gym-agent-secrets
+              key: DB_PASSWORD
+        - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+          value: "org.hibernate.dialect.PostgreSQLDialect"
+

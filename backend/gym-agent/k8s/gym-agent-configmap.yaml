@@ -1,0 +1,29 @@
+git apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gym-agent-config
+  namespace: default
+data:
+  # Database
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "postgres"
+  DB_USERNAME: "admin"
+  
+  # Ollama
+  OLLAMA_HOST: "http://ollama:11434"
+  OLLAMA_MODEL: "llama3"
+  
+  # Server
+  SERVER_PORT: "8080"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gym-agent-secrets
+  namespace: default
+type: Opaque
+stringData:
+  DB_PASSWORD: "admin"
+  JWT_SECRET: "QmFzZTY0RW5jb2RlZFNlY3JldFN0cmluZzEyMzQ1Ng=="
+
